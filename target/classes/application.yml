@@ -1,0 +1,37 @@
+server:
+  port: 2003
+
+#Admin configuration
+info:
+  name: easyms-admin
+  description: easyms-admin
+  version: 1.0.0-SNAPSHOT
+  stage: local
+
+
+spring:
+  application:
+    id: easyms-admin
+    name: easyms-admin
+  boot:
+    admin:
+      client:
+        url: ${boot.admin.client.url}
+        username: ${boot.admin.client.username}
+        password: ${boot.admin.client.password}
+  security:
+    user:
+      name: admin
+      password: admin
+easyms:
+  logging:
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: false
+      host: "localhost"
+      port: 5000
+      queue-size: 512
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
