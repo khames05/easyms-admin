@@ -19,10 +19,15 @@ spring:
         url: ${boot.admin.client.url}
         username: ${boot.admin.client.username}
         password: ${boot.admin.client.password}
+        instance:
+          metadata:
+            user.name: ${boot.admin.client.username}
+            user.password: ${boot.admin.client.username}
+
   security:
     user:
-      name: admin
-      password: admin
+      name: ${boot.admin.client.username}
+      password: ${boot.admin.client.username}
 easyms:
   logging:
     logstash: # Forward logs to logstash over a socket, used by LoggingConfig
@@ -30,6 +35,11 @@ easyms:
       host: "localhost"
       port: 5000
       queue-size: 512
+  oauth2:
+    client:
+      userAuthorizationUri: ${easyms.oauth2.client.userAuthorizationUri}
+      clientId: ${easyms.oauth2.client.clientId}
+      clientSecret: ${easyms.oauth2.client.clientSecret}
 management:
   endpoints:
     web:
