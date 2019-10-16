@@ -23,36 +23,4 @@ import java.util.stream.StreamSupport;
 @Configuration
 public class AdminConfig {
 
-    @Bean
-    public ObjectMapper mapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(Registration.class, new JsonDeserializer<Registration>() {
-            @Override
-            public Registration deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException {
-                JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-
-                return Registration.builder()
-                        .name(node.get("name").asText())
-                        .managementUrl(node.get("managementUrl").asText())
-                        .healthUrl(node.get("healthUrl").asText())
-                        .serviceUrl(node.get("serviceUrl").asText())
-                        .metadata(calculateMetadataMap(node.get("metadata")))
-                        .build();
-            }
-
-            private Map<String, String> calculateMetadataMap(JsonNode metadataNode) {
-                Iterator<String> metadataFieldNamesIterator = metadataNode.fieldNames();
-                Stream<String> metadataFieldNamesStream = StreamSupport.stream(
-                        Spliterators.spliteratorUnknownSize(metadataFieldNamesIterator, Spliterator.ORDERED), false);
-
-                return metadataFieldNamesStream.collect(Collectors.toMap(Function.identity(),
-                        e -> metadataNode.get(e).asText()));
-            }
-        });
-        objectMapper.registerModule(module);
-
-        return objectMapper;
-    }
 }
